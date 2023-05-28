@@ -1,0 +1,168 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Media;
+
+namespace Final_Project
+{
+    public partial class Thirdgame : Form
+    {
+        bool goleft;
+        bool goright;
+        int speed = 8;
+        int score = 0;
+        int missed = 0;
+        Random rndY = new Random();
+        Random rndX = new Random();
+        PictureBox splash = new PictureBox();
+        public Thirdgame()
+        {
+            InitializeComponent();
+            reset();
+        }
+
+        private void gameisdown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+
+                goleft = true;
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+
+                goright = true;
+            }
+        }
+        private void gameisup(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left)
+            {
+
+                goleft = false;
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+
+                goright = false;
+            }
+        }
+        private void gametick(object sender, EventArgs e)
+        {
+            scores.Text = "Roses Caught: " + score;
+            MISS.Text = "Roses Missed: " + missed;
+
+            if (goleft == true && chickencute.Left > 0)
+            {
+
+                chickencute.Left -= 12;
+
+                chickencute.Image = Properties.Resources.chicken_normal2;
+            }
+
+            if (goright == true && chickencute.Left + chickencute.Width < this.ClientSize.Width)
+            {
+
+                chickencute.Left += 12;
+
+                chickencute.Image = Properties.Resources.chicken_normal;
+            }
+
+            foreach (Control X in this.Controls)
+            {
+
+                if (X is PictureBox && X.Tag == "rose")
+                {
+
+                    X.Top += speed;
+
+                    if (X.Top + X.Height > this.ClientSize.Height)
+                    {
+
+                        splash.Image = Properties.Resources.SPLASHSTRAW;
+                        splash.Location = X.Location;
+                        splash.Height = 59;
+                        splash.Width = 60;
+                        splash.BackColor = System.Drawing.Color.Transparent;
+                        this.Controls.Add(splash);
+                        X.Top = rndY.Next(80, 300) * -1;
+                        X.Left = rndX.Next(5, this.ClientSize.Width - X.Width);
+                        missed++;
+                        chickencute.Image = Properties.Resources.chicken_hurt;
+                    }
+
+                    if (X.Bounds.IntersectsWith(chickencute.Bounds))
+                    {
+                        X.Top = rndY.Next(100, 300) * -1;
+                        X.Left = rndX.Next(5, this.ClientSize.Width - X.Width);
+                        score++;
+                    }
+
+                    if (score >= 20)
+                    {
+                        speed = 16;
+                    }
+
+                    if (missed > 5)
+                    {
+                        gameTimer.Stop();
+
+                        string MessageBoxTitle = "GameOver";
+                        string MessageBoxContent = "We lost beutiful roses" + "\r\n" + "restart(Y) or Back the Main Minigame(N)";
+
+                        DialogResult dialogResult = MessageBox.Show(MessageBoxContent, MessageBoxTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            this.Hide();
+                            MiniGameChoice form = new MiniGameChoice();
+                            form.Show();
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            reset();
+                        }
+
+                    }
+                }
+            }
+        }
+        private void reset()
+        {
+            foreach (Control X in this.Controls)
+            {
+
+                if (X is PictureBox && X.Tag == "rose")
+                {
+
+                    X.Top = rndY.Next(80, 300) * -1;
+                    X.Left = rndX.Next(5, this.ClientSize.Width - X.Width);
+                }
+            }
+            chickencute.Left = this.ClientSize.Width / 2;
+            chickencute.Image = Properties.Resources.chicken_normal2;
+            score = 0;
+            missed = 0;
+            speed = 8;
+            goleft = false;
+            goright = false;
+            gameTimer.Start();
+        }
+
+        private void Thirdgame_Load(object sender, EventArgs e)
+        {
+            SoundPlayer splayer = new SoundPlayer(@"C:\Users\Thien Kim Nguyen\Downloads\roses.wav");
+            splayer.Play();
+        }
+    }
+}
+
+
+
+
