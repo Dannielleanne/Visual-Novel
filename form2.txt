@@ -63,8 +63,8 @@ namespace Final_Project
 
         private void continute_Click(object sender, EventArgs e)
         {
-            string MessageBoxTitle = "Continute";
-            string MessageBoxContent = "Do you want to continute the story?";
+            string MessageBoxTitle = "Continue";
+            string MessageBoxContent = "Do you want to continue the story?";
 
             DialogResult dialogResult = MessageBox.Show(MessageBoxContent, MessageBoxTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
