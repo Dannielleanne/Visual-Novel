@@ -115,7 +115,7 @@ namespace Final_Project
                         gameTimer.Stop();
 
                         string MessageBoxTitle = "GameOver";
-                        string MessageBoxContent = "We lost beutiful roses" + "\r\n" + "restart(Y) or Back the Main Minigame(N)";
+                        string MessageBoxContent = "We lost beautiful roses" + "\r\n" + "restart(Y) or Back the Main Minigame(N)";
 
                         DialogResult dialogResult = MessageBox.Show(MessageBoxContent, MessageBoxTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (dialogResult == DialogResult.Yes)
